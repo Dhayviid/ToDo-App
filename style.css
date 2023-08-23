@@ -113,9 +113,9 @@ body {
     transition: transform 0.4s ease;
     box-shadow: 0 0 6px rgba(0,0,0,0.15);
 }
-.settings:hover .task-menu {
+.settings:hover .task-menu.show {
     transform: scale(1);
-}
+}  
 .task-menu li {
     height: 25px;
     font-size: 16px;
