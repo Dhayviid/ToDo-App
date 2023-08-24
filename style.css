@@ -10,6 +10,7 @@ body {
     background: rgb(2,0,36);
     background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
     overflow: hidden;
+    height: 100vh;
 }
 .wrapper {
     max-width: 405px;
@@ -17,6 +18,8 @@ body {
     background: #fff;
     border-radius: 10px;
     padding: 28px 0;
+    height: 70%;
+    overflow: hidden;
 }
 .task-input {
     height: 52px;
@@ -55,7 +58,14 @@ body {
     font-size: 17px;
 }
 .filters span.active {
-    color: #3c87ff;
+    /* color: #3c87ff; */
+    background: #3c87ff;
+    border-radius: 20px;
+    padding: 7px 13px;
+}
+.filters span.active:hover {
+    transform: scale(1.15);
+    transition: all 0.4s ease;
 }
 .filters span:first-child {
     margin-left: 0;
@@ -71,8 +81,14 @@ body {
     background: rgb(2,0,36);
     background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
 }
+.clear-btn:hover {
+    transform: scale(1.15);
+    transition: all 0.4s ease;
+}
 .task-box {
     margin: 20px 25px;
+     overflow-y: auto;
+     height: 300px;
 }
 .task-box .task {
     list-style: none;

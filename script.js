@@ -82,27 +82,6 @@ function updateStatus(selectedTask) {
     }
     localStorage.setItem("todo-list", JSON.stringify(todos));
 }
-
-// taskInput.addEventListener("keyup", e => {
-//     let userTask = taskInput.value.trim();
-//     if (e.key === "Enter" && userTask) {
-//         if(isEditedTask) {
-//             if(!todos) {
-//                 todos = [];
-                
-//             }
-//             let taskInfo = { name: userTask, status: "pending" };
-//             todos.push(taskInfo);
-
-//         } else {
-//             isEditedTask = false;
-//             todos[editId].name = userTask;
-//         }
-//         taskInput.value = "";
-//         localStorage.setItem("todo-list", JSON.stringify(todos));
-//         showTodo("all");
-//     }
-// });
 taskInput.addEventListener("keyup", e => {
     let userTask = taskInput.value.trim();
 
