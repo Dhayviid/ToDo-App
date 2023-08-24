@@ -1,14 +1,28 @@
 const taskInput = document.querySelector(".task-input input"),
+filters = document.querySelectorAll(".filters span"),
+clearAll =document.querySelector(".clear-btn"), 
 taskBox = document.querySelector(".task-box");
+
+let editId;
+let isEditedTask = false;
 
 let todos = JSON.parse(localStorage.getItem("todo-list"));
 
-function showTodo() {
+filters.forEach(btn => {
+    btn.addEventListener("click", () => {
+        document.querySelector("span.active").classList.remove("active");
+        btn.classList.add("active");
+        showTodo(btn.id)
+    });
+});
+
+function showTodo(filter) {
     let li = "";
     if(todos) {
         todos.forEach((todo, id) => {
             let isCompleted = todo.status == "completed" ? "checked" : "";
-            li += `<li class="task">
+            if(filter == todo.status || filter =="all") {
+                li += `<li class="task">
                 <label for="${id}">
                     <input onclick="updateStatus(this)" type="checkbox" id="${id}" ${isCompleted}>
                     <p class="${isCompleted}">${todo.name}</p>
@@ -16,17 +30,18 @@ function showTodo() {
                 <div class="settings">
                     <i onclick="showMenu(this)" class="fa fa-ellipsis-h"></i>
                     <ul class="task-menu">
-                        <li><i class="fa fa-pencil"></i>Edit</li>
-                        <li><i class="fa fa-trash"></i>Delete</li>
+                        <li onclick="editTask(${id}, '${todo.name}')"><i class="fa fa-pencil"></i>Edit</li>
+                        <li onclick="deleteTask(${id})"><i class="fa fa-trash"></i>Delete</li>
                     </ul>
                 </div>
             </li>`;
+            }
         });
     }
-    taskBox.innerHTML = li;
+    taskBox.innerHTML = li || `<span>No tasks available</span>`;
 }
 
-showTodo();
+showTodo("all");
 
 function showMenu(selectedTask) {
    let taskMenu = selectedTask.parentElement.lastElementChild;
@@ -35,8 +50,26 @@ function showMenu(selectedTask) {
     if(e.target.tagName != "I" || e.target != selectedTask) {
         taskMenu.classList.remove("show");
     }
-   })
+   });
 }
+
+function editTask(taskId, taskName) {
+    editId = taskId;
+    isEditedTask = true;
+    taskInput.value = taskName;
+}
+
+
+function deleteTask(deleteId) {
+    todos.splice(deleteId, 1);
+    localStorage.setItem("todo-list", JSON.stringify(todos));
+    showTodo("all");
+}
+clearAll.addEventListener("click", () => {
+    todos.splice(0, todos.length);
+    localStorage.setItem("todo-list", JSON.stringify(todos));
+    showTodo("all");
+});
 
 function updateStatus(selectedTask) {
     let taskName = selectedTask.parentElement.lastElementChild;
@@ -50,14 +83,47 @@ function updateStatus(selectedTask) {
     localStorage.setItem("todo-list", JSON.stringify(todos));
 }
 
+// taskInput.addEventListener("keyup", e => {
+//     let userTask = taskInput.value.trim();
+//     if (e.key === "Enter" && userTask) {
+//         if(isEditedTask) {
+//             if(!todos) {
+//                 todos = [];
+                
+//             }
+//             let taskInfo = { name: userTask, status: "pending" };
+//             todos.push(taskInfo);
+
+//         } else {
+//             isEditedTask = false;
+//             todos[editId].name = userTask;
+//         }
+//         taskInput.value = "";
+//         localStorage.setItem("todo-list", JSON.stringify(todos));
+//         showTodo("all");
+//     }
+// });
 taskInput.addEventListener("keyup", e => {
     let userTask = taskInput.value.trim();
 
+    // Check if the pressed key is "Enter" and the input is not empty
     if (e.key === "Enter" && userTask) {
-        taskInput.value = "";
-        let taskInfo = { name: userTask, status: "pending" };
-        todos.push(taskInfo);
-        localStorage.setItem("todo-list", JSON.stringify(todos));
-        showTodo();
+        if (isEditedTask) {
+            // If isEditedTask is true, you are editing an existing task
+            // Put your code here for editing tasks
+        } else {
+            // If isEditedTask is false, you are adding a new task
+            if (!todos) {
+                todos = [];
+            }
+            let taskInfo = { name: userTask, status: "pending" };
+            todos.push(taskInfo);
+        }
+
+        taskInput.value = ""; // Clear the input field
+        isEditedTask = false; // Reset the editing flag
+        localStorage.setItem("todo-list", JSON.stringify(todos)); // Update local storage
+        showTodo("all"); // Refresh the task list
     }
 });
+
